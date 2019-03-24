@@ -30,6 +30,34 @@ app.post('/api/users/register', (req, res) => {
     });
 });
 
+app.post('/api/users/login', (req, res) => {
+    // Find the email
+    User.findOne({
+        'email': req.body.email
+    }, (err, user) => {
+        if(!user) return res.json({ 
+            loginSuccess: false,
+            message: 'Email not found.'
+        });
+        // Check the password
+        user.comparePassword(req.body.password, (err, passwordsMatch) => {
+            if(!passwordsMatch) {
+                return res.json({
+                    loginSuccess: false,
+                    message: 'Incorrect Password'
+                });
+            }
+            // Generate token
+            user.generateToken((err, user) => {
+                if(err) return res.status(400).send(err);
+                res.cookie('x_auth', user.token).status(200).json({
+                    loginSuccess: true
+                });
+            });
+        });
+    });
+});
+
 
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
