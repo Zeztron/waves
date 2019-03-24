@@ -19,7 +19,6 @@ const { User } = require('./models/user');
 // ====================
 //        USERS
 // ====================
-
 app.post('/api/users/register', (req, res) => {
     const user = new User(req.body);
     user.save((err, doc) => {
