@@ -23,6 +23,7 @@ const { Product } = require('./models/product');
 const { auth } = require("./middleware/auth");
 const { admin } = require('./middleware/admin');
 
+
 // ====================
 //        PRODUCTS
 // ====================
@@ -37,7 +38,22 @@ app.post('/api/product/article', auth, admin, (req, res) => {
     });
 });
 
+app.get('/api/product/articles_by_id', (req, res) => {
+    let type = req.query.type;
+    let items = req.query.id;
 
+    if(type === 'array') {
+        let ids = req.query.id.split(',');
+        items = [];
+        items = ids.map(item => {
+            return mongoose.Types.ObjectId(item);
+        });
+    }
+
+    Product.find({ '_id': {$in: items} }).populate('brand').populate('wood').exec((err, docs) => {
+        return res.status(200).send(docs)
+    });
+});
 
 // ====================
 //        WOODS
@@ -59,7 +75,6 @@ app.get('/api/product/woods', (req, res) => {
         res.status(200).send(woods);
     });
 });
-
 
 // ====================
 //        BRANDS
@@ -97,7 +112,6 @@ app.get('/api/users/auth', auth, (req, res) => {
         history: req.user.history
     });
 });
-
 
 app.post('/api/users/register', (req, res) => {
     const user = new User(req.body);
@@ -152,7 +166,6 @@ app.get('/api/user/logout', auth, (req, res) => {
         }
     );
 });
-
 
 
 // Fire up the server
