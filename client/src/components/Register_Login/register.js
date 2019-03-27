@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import Dialog from '@material-ui/core/Dialog';
 import FormField from "../utils/Form/FormField";
 import { update, generateData, isFormValid } from "../utils/Form/formActions";
-import { loginUser } from "../../redux/actions/user_actions";
+import { registerUser } from "../../redux/actions/user_actions";
 
 
 class Register extends Component {
 
     state = {
         formError: false,
-        formSuccess: '',
+        formSuccess: false,
         formData: {
-            firstName: {
+            firstname: {
                 element: 'input',
                 value: '',
                 config: {
@@ -26,7 +27,7 @@ class Register extends Component {
                 touched: false,
                 validationMessage: ''
             },
-            lastName: {
+            lastname: {
                 element: 'input',
                 value: '',
                 config: {
@@ -106,8 +107,27 @@ class Register extends Component {
         let formIsValid = isFormValid(this.state.formData, 'register');
 
         if (formIsValid) {
-            console.log(dataToSubmit);
-            
+            this.props.dispatch(registerUser(dataToSubmit))
+                .then(response => {
+                    if(response.payload.registerSuccess) {
+                        console.log(response.payload);
+                        this.setState({
+                            formError: false,
+                            formSuccess: true
+                        });
+                        setTimeout(() => {
+                            this.props.history.push('/register_login');
+                        }, 3000);
+                    } else {
+                        this.setState({
+                            formError: true
+                        });
+                    }
+                }).catch(e => {
+                    this.setState({
+                        formError: true
+                    });
+                });
         } else {
             this.setState({
                 formError: true
@@ -128,15 +148,15 @@ class Register extends Component {
                                     <div className="form_block_two">
                                         <div className="block">
                                             <FormField
-                                                id={'firstName'}
-                                                formData={this.state.formData.firstName}
+                                                id={'firstname'}
+                                                formData={this.state.formData.firstname}
                                                 change={(element) => this.updateForm(element)}
                                             />
                                         </div>
                                         <div className="block">
                                             <FormField
-                                                id={'lastName'}
-                                                formData={this.state.formData.lastName}
+                                                id={'lastname'}
+                                                formData={this.state.formData.lastname}
                                                 change={(element) => this.updateForm(element)}
                                             />
                                         </div>
@@ -159,7 +179,7 @@ class Register extends Component {
                                         </div>
                                         <div className="block">
                                             <FormField
-                                                id={'confirm_password'}
+                                                id={'confirmPassword'}
                                                 formData={this.state.formData.confirmPassword}
                                                 change={(element) => this.updateForm(element)}
                                             />
@@ -174,6 +194,16 @@ class Register extends Component {
                         </div>
                     </div>
                 </div>
+                <Dialog open={this.state.formSuccess}>
+                    <div className="dialog_alert">
+                        <div>
+                            Congratulations!
+                        </div>
+                        <div>
+                            You will be redirected to the login page in a couple seconds...
+                        </div>
+                    </div>
+                </Dialog>
             </div>
         )
     }
