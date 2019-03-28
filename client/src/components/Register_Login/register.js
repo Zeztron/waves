@@ -109,7 +109,7 @@ class Register extends Component {
         if (formIsValid) {
             this.props.dispatch(registerUser(dataToSubmit))
                 .then(response => {
-                    if(response.payload.registerSuccess) {
+                    if(response.payload.success) {
                         console.log(response.payload);
                         this.setState({
                             formError: false,
@@ -186,6 +186,11 @@ class Register extends Component {
                                         </div>
                                     </div>
                                     <div>
+                                        { this.state.formError ?
+                                            <div className="error_label">
+                                                Please check your data.
+                                            </div>
+                                        : null}
                                         <button onClick={(event) => this.submitForm(event)}>
                                             Create An Account
                                         </button>
@@ -194,6 +199,7 @@ class Register extends Component {
                         </div>
                     </div>
                 </div>
+                
                 <Dialog open={this.state.formSuccess}>
                     <div className="dialog_alert">
                         <div>
