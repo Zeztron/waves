@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getProductsBySell, getProductsByArrival } from '../../redux/actions/product_actions';
 import HomeSlider from './HomeSlider';
 import HomePromotion from './HomePromotion';
 
-export default class Home extends Component {
+
+class Home extends Component {
+
+    componentDidMount() {
+        this.props.dispatch(getProductsBySell());
+        this.props.dispatch(getProductsByArrival());
+    }
+
+
     render() {
         return (
             <div>
@@ -12,3 +22,11 @@ export default class Home extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        products: state.products
+    }
+}
+
+export default connect(mapStateToProps)(Home);
