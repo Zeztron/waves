@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { privateEncrypt } from 'crypto';
+import MyButton from './button';
 
 export default class Card extends Component {
 
@@ -7,7 +8,7 @@ export default class Card extends Component {
         if(images.length > 0) {
             return images[0].url
         } else {
-            return '../../../public/images/image_not_availble.png';
+            return '/images/image_not_availble.png';
         }
     }
 
@@ -42,7 +43,27 @@ export default class Card extends Component {
                         </div>
                     : null
                 }
-                
+                <div className="actions">
+                    <div className="button_wrapp">
+                        <MyButton
+                            type="default"
+                            altClass="card_link"
+                            title="View Product"
+                            linkTo={`/product_detail/${props._id}`}
+                            addStyles={{
+                                margin: '10px 0 0 0 0'
+                            }}
+                        />
+                    </div>
+                    <div className="button_wrapp">
+                        <MyButton
+                            type="bag_link"
+                            runAction={() => {
+                                console.log('hi');
+                            }}
+                        />
+                    </div>
+                </div>
             </div>
         )
   }
