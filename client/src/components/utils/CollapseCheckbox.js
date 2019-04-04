@@ -46,7 +46,7 @@ class CollapseCheckbox extends Component {
 
     renderList = () => (
         this.props.list ?
-            this.props.list.map((value) => (
+            this.props.list.map(value => (
                 <ListItem key={value._id} style={{padding: '10px 0'}}>
                     <ListItemText primary={value.name} />
                     <ListItemSecondaryAction>
