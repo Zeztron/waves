@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faBars from '@fortawesome/fontawesome-free-solid/faBars';
+import faTh from '@fortawesome/fontawesome-free-solid/faTh';
 import { getProductsToShop, getBrands, getWoods } from '../../redux/actions/product_actions';
 import PageTop from '../utils/PageTop';
 import CollapseCheckbox from '../utils/CollapseCheckbox';
@@ -89,6 +92,12 @@ class Shop extends Component {
         });
     }
 
+    handleGrid = () => {
+        this.setState({
+            grid: !this.state.grid ? 'grid_bars' : ''
+        });
+    }
+
     render() {
         const products = this.props.products;
 
@@ -127,8 +136,19 @@ class Shop extends Component {
                         </div>
                         <div className="right">
 `                           <div className="shop_options">
-                                <div className="ship_grids clear">
-                                    grids
+                                <div className="shop_grids clear">
+                                    <div
+                                        className={`grid_btn ${this.state.grid ? '' : 'active'}`}
+                                        onClick={() => this.handleGrid()}
+                                    >
+                                        <FontAwesomeIcon icon={faTh}/>
+                                    </div>
+                                    <div
+                                        className={`grid_btn ${!this.state.grid ? '' : 'active'}`}
+                                        onClick={() => this.handleGrid()}
+                                    >
+                                        <FontAwesomeIcon icon={faBars} />
+                                    </div>
                                 </div>
                             </div>
                             <div>
