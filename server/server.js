@@ -36,6 +36,45 @@ app.all('/', function (req, res, next) {
 // ====================
 //        PRODUCTS
 // ====================
+app.post('/api/product/shop', (req, res) => {
+    const request = req.body;
+    let order = request.order ? request.order : 'desc';
+    let sortBy = request.sortBy ? request.sortBy : '_id';
+    let limit = request.limit ? parseInt(request.limit) : 100;
+    let skip = parseInt(request.skip);
+    let findArgs = {};
+
+    for(let key in request.filters) {
+        if(request.filters[key].length > 0) {
+            if(key === 'price') {
+                findArgs[key] = {
+                    $gte: request.filters[key][0],
+                    $lte: request.filters[key][1]
+                }
+            } else {
+                findArgs[key] = request.filters[key];
+            }
+        }
+    }
+
+    Product.
+    find(findArgs).
+    populate('brand').
+    populate('wood').
+    sort([[sortBy, order]]).
+    skip(skip).
+    limit(limit).
+    exec((err, articles) => {
+        if(err) return res.status(400).send(err);
+        res.status(200).json({
+            size: articles.length,
+            articles
+        });
+    });
+});
+
+
+
 app.post('/api/product/article', auth, admin, (req, res) => {
     const product = new Product(req.body);
 
