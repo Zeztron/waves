@@ -47,6 +47,71 @@ const FormField = ({ formData, change, id }) => {
                     </div>
                 )
             break;
+            case('select'):
+                formTemplate = (
+                    <div className="formBlock">
+                        {formData.showLabel ?
+                            <div className="label_inputs">
+                                {formData.config.label}
+                            </div>
+                            : null
+                        }
+                        <select
+                            value={formData.value}
+                            onBlur={(event) => change({
+                                event,
+                                id,
+                                blur: true
+                            })}
+                            onChange={(event) => change({
+                                event,
+                                id,
+                                blur: true
+                            })}
+                        >
+                            <option value="">Select One</option>
+                            {
+                                formData.config.options.map(item => (
+                                    <option 
+                                        key={item.key} 
+                                        value={item.key}
+                                    >
+                                        {item.value}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                        {showError()}
+                    </div>
+                )
+            break;
+            case('textarea'):
+                formTemplate = (
+                    <div className="formBlock">
+                        {formData.showLabel ?
+                            <div className="label_inputs">
+                                {formData.config.label}
+                            </div>
+                            : null
+                        }
+                        <textarea
+                            {...formData.config}
+                            value={formData.value}
+                            onBlur={(event) => change({
+                                event,
+                                id,
+                                blur: true
+                            })}
+                            onChange={(event) => change({
+                                event,
+                                id,
+                                blur: true
+                            })}
+                        />
+                        {showError()}
+                    </div>
+                )
+            break;
             default:
                 formTemplate = '';
         }

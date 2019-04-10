@@ -205,21 +205,85 @@ class AddProduct extends Component {
         }
     }
 
+    componentDidMount() {
+        const formData = this.state.formData;
+    }
+
     render() {
         return (
-            <UserLayout>
-                <div>
-                    <h1>Add Product</h1>
-                    <form onSubmit={e => this.submitForm(e)}>
-                        <FormField
-                            id={'name'}
-                            formData={this.state.formData.name}
-                            change={(element) => this.updateForm(element)}
-                        />
-                    </form>
-                </div>
-            </UserLayout>
-        )
+          <UserLayout>
+            <div>
+              <h1>Add Product</h1>
+              <form onSubmit={e => this.submitForm(e)}>
+                <FormField
+                  id={"name"}
+                  formData={this.state.formData.name}
+                  change={element => this.updateForm(element)}
+                />
+                <FormField
+                  id={"description"}
+                  formData={this.state.formData.description}
+                  change={element => this.updateForm(element)}
+                />
+                <FormField
+                  id={"price"}
+                  formData={this.state.formData.price}
+                  change={element => this.updateForm(element)}
+                />
+                <div className="form_devider" />
+                <FormField
+                  id={"brand"}
+                  formData={this.state.formData.brand}
+                  change={element => this.updateForm(element)}
+                />
+                <FormField
+                  id={"shipping"}
+                  formData={this.state.formData.shipping}
+                  change={element => this.updateForm(element)}
+                />
+                <FormField
+                  id={"available"}
+                  formData={this.state.formData.available}
+                  change={element => this.updateForm(element)}
+                />
+                <div className="form_devider" />
+                <FormField
+                  id={"wood"}
+                  formData={this.state.formData.wood}
+                  change={element => this.updateForm(element)}
+                />
+                <FormField
+                  id={"frets"}
+                  formData={this.state.formData.frets}
+                  change={element => this.updateForm(element)}
+                />
+                <div className="form_devider" />
+                <FormField
+                  id={"publish"}
+                  formData={this.state.formData.publish}
+                  change={element => this.updateForm(element)}
+                />
+                {
+                    this.state.formSuccess ?
+                        <div className="form_success">
+                            Success
+                        </div>
+                    : null
+                }
+                {
+                    this.state.formError ?
+                    <div className="error_label">
+                        Please check your data.
+                    </div>
+                    : null
+                }
+                <button onClick={(event) => this.submitForm(event)}>
+                    Add Product
+                </button>
+              </form>
+            </div>
+          </UserLayout>
+        );
     }
 }
 
