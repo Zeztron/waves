@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getBrands, getWoods } from '../../../redux/actions/product_actions';
 import UserLayout from '../../../hoc/user';
 import FormField from "../../utils/Form/FormField";
-import { update, generateData, isFormValid } from "../../utils/Form/formActions";
+import { update, generateData, isFormValid, populateOptionFields } from "../../utils/Form/formActions";
 
 class AddProduct extends Component {
 
@@ -205,8 +205,32 @@ class AddProduct extends Component {
         }
     }
 
+    updateFields = (newFormData) => {
+        this.setState({
+            formData: newFormData
+        });
+    }
+
     componentDidMount() {
         const formData = this.state.formData;
+
+        this.props.dispatch(getBrands()).then(response => {
+            const newFormData = populateOptionFields(
+              formData,
+              this.props.products.brands,
+              'brand'
+            );
+            this.updateFields(newFormData);
+        });
+
+        this.props.dispatch(getWoods()).then(response => {
+            const newFormData = populateOptionFields(
+                formData,
+                this.props.products.woods,
+                'wood'
+            );
+            this.updateFields(newFormData);
+        });
     }
 
     render() {
