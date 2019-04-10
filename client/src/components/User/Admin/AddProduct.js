@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { getBrands, getWoods } from '../../../redux/actions/product_actions';
+import { getBrands, getWoods, addProduct, clearProduct } from '../../../redux/actions/product_actions';
 import UserLayout from '../../../hoc/user';
 import FormField from "../../utils/Form/FormField";
-import { update, generateData, isFormValid, populateOptionFields } from "../../utils/Form/formActions";
+import { update, generateData, isFormValid, populateOptionFields, resetFields } from "../../utils/Form/formActions";
 
 class AddProduct extends Component {
 
@@ -209,6 +209,56 @@ class AddProduct extends Component {
         this.setState({
             formData: newFormData
         });
+    }
+
+    updateForm = (element) => {
+        const newFormData = update(element, this.state.formData, 'products');
+
+        this.setState({
+            formError: false,
+            formData: newFormData
+        })
+    }
+
+    resetFieldHandler = () => {
+        const newFormData = resetFields(this.state.formData, 'products');
+
+        this.setState({
+            formData: newFormData,
+            formSuccess: true
+        });
+
+        setTimeout(() => {
+            this.setState({
+                formSuccess: false
+            }, () => {
+                this.props.dispatch(clearProduct());
+            });
+        }, 3000);
+    }
+
+    submitForm = (event) => {
+        event.preventDefault();
+
+        let dataToSubmit = generateData(this.state.formData, 'products');
+        let formIsValid = isFormValid(this.state.formData, 'products');
+
+        if (formIsValid) {
+            // console.log(dataToSubmit);
+            this.props.dispatch(addProduct(dataToSubmit)).then(() => {
+                if(this.props.products.addProduct.success) {
+                    this.resetFieldHandler();
+                } else {
+                    this.setState({
+                        formError: true
+                    });
+                }
+            });
+        } else {
+            this.setState({
+                formError: true
+            });
+        }
     }
 
     componentDidMount() {
