@@ -296,8 +296,17 @@ class AddProduct extends Component {
     });
   }
 
-  imagesHandler = () => {
+  imagesHandler = (images) => {
+    const newFormData = {
+        ...this.state.formData
+    }
 
+    newFormData['images'].value = images;
+    newFormData['images'].valid = true;
+
+    this.setState({
+        formData: newFormData
+    });
   }
 
   render() {
@@ -307,7 +316,7 @@ class AddProduct extends Component {
           <h1>Add Product</h1>
           <form onSubmit={e => this.submitForm(e)}>
             <FileUpload
-                imagesHandler={(images) => this.images.imagesHandler(images)}
+                imagesHandler={(images) => this.imagesHandler(images)}
                 reset={this.state.formSuccess}
             />
             <FormField

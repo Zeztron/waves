@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
+const formidable = require("express-formidable");
+const cloudinary = require("cloudinary");
 
 const app = express();
 require("dotenv").config();
@@ -23,6 +25,12 @@ const { Product } = require('./models/product');
 const { auth } = require("./middleware/auth");
 const { admin } = require('./middleware/admin');
 
+// Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET
+});
 
 // Enable cross domain script
 app.all('/', function (req, res, next) {
@@ -30,8 +38,6 @@ app.all('/', function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
 });
-
-
 
 // ====================
 //        PRODUCTS
@@ -230,6 +236,19 @@ app.get('/api/users/logout', auth, (req, res) => {
             });
         }
     );
+});
+
+app.post('/api/users/uploadimage', auth, admin, formidable(), (req, res) => {
+    cloudinary.uploader.upload(req.files.file.path, (result) => {
+        console.log(result);
+        res.status(200).send({
+            public_id: result.public_id,
+            url: result.url
+        });
+    }, {
+        public_id: `${Date.now()}`,
+        resource_type: 'auto'
+    });
 });
 
 
