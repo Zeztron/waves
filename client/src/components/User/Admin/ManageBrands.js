@@ -7,7 +7,7 @@ import {
     resetFields
 } from "../../utils/Form/formActions";
 import FormField from "../../utils/Form/FormField";
-import { getBrands } from "../../../redux/actions/product_actions";
+import { getBrands, addBrand } from "../../../redux/actions/product_actions";
 
 class ManageBrands extends Component {
 
@@ -43,23 +43,36 @@ class ManageBrands extends Component {
         : null
     )
 
-    componentDidMount() {
-        this.props.dispatch(getBrands());
+    
+
+    resetFieldsHandler = () => {
+        const newFormData = resetFields(this.state.formData, "brands");
+
+        this.setState({
+            formData: newFormData,
+            formSuccess: true
+        });
     }
 
-    submitForm = event => {
+    submitForm = (event) => {
         event.preventDefault();
 
-        let dataToSubmit = generateData(this.state.formData, "brands");
-        let formIsValid = isFormValid(this.state.formData, "brands");
+        let dataToSubmit = generateData(this.state.formData, 'brands');
+        let formIsValid = isFormValid(this.state.formData, 'brands')
+        let existingBrands = this.props.products.brands;
 
         if (formIsValid) {
-            console.log(dataToSubmit);
-            
+            this.props.dispatch(addBrand(dataToSubmit, existingBrands)).then(response => {
+                if (response.payload.success) {
+                    this.resetFieldsHandler();
+                } else {
+                    this.setState({ formError: true })
+                }
+            })
         } else {
             this.setState({
                 formError: true
-            });
+            })
         }
     }
 
@@ -71,6 +84,10 @@ class ManageBrands extends Component {
             formData: newFormData
         });
     };
+
+    componentDidMount() {
+        this.props.dispatch(getBrands());
+    }
 
 
     render() {
