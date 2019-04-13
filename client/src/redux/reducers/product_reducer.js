@@ -5,6 +5,7 @@ import {
     GET_BRANDS, 
     ADD_BRAND,
     GET_WOODS,
+    ADD_WOOD,
     ADD_PRODUCT,
     CLEAR_PRODUCT
 } from "../actions/types";
@@ -25,6 +26,12 @@ export default function (state = {}, action) {
             }
         case GET_WOODS:
             return {...state, woods: action.payload}
+        case ADD_WOOD:
+            return {
+                ...state,
+                addWood: action.payload.success,
+                woods: action.payload.woods
+            }
         case GET_PRODUCTS_TO_SHOP:
             return {
                 ...state,

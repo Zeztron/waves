@@ -43,8 +43,6 @@ class ManageBrands extends Component {
         : null
     )
 
-    
-
     resetFieldsHandler = () => {
         const newFormData = resetFields(this.state.formData, "brands");
 
