@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getProductDetail, clearProductDetail } from '../../redux/actions/product_actions';
-import ProductInfo from './ProductInfo';
+import ProductInfo from "./ProductInfo";
+import ProductImages from './ProductImages';
 import PageTop from '../utils/PageTop';
 
 class ProductPage extends Component {
@@ -17,7 +18,7 @@ class ProductPage extends Component {
     }
 
     addToCartHandler = () => {
-        
+
     }
 
     render() {
@@ -31,7 +32,11 @@ class ProductPage extends Component {
                         this.props.products.prodDetail ?
                             <div className="product_detail_wrapper">
                                 <div className="left">
-                                    images
+                                    <div style={{width: '500px'}}>
+                                        <ProductImages
+                                            detail={this.props.products.prodDetail}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="right">
                                     <ProductInfo

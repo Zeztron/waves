@@ -5,7 +5,6 @@ import faCheck from '@fortawesome/fontawesome-free-solid/faCheck';
 import faTimes from "@fortawesome/fontawesome-free-solid/faTimes";
 import MyButton from '../utils/button';
 
-
 const ProductInfo = (props) => {
     
     const showProdTags = (detail) => (
