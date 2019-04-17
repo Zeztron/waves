@@ -240,7 +240,7 @@ app.get('/api/users/logout', auth, (req, res) => {
 
 app.post('/api/users/uploadimage', auth, admin, formidable(), (req, res) => {
     cloudinary.uploader.upload(req.files.file.path, (result) => {
-        console.log(result);
+        // console.log(result);
         res.status(200).send({
             public_id: result.public_id,
             url: result.url
@@ -259,6 +259,38 @@ app.get('/api/users/removeimage', auth, admin, (req, res) => {
             return res.json({ success: false, error });
         }
         res.status(200).send('OK');
+    });
+});
+
+app.post('/api/users/addToCart', auth, (req, res) => {
+    User.findOne({_id: req.user._id}, (err, doc) => {
+        let duplicate = false;
+
+        doc.cart.forEach((item) => {
+            if(item.id == req.query.productId) {
+                duplicate = true;
+            }
+        });
+
+        if(duplicate) {
+
+        } else {
+            User.findOneAndUpdate(
+                { _id: req.user._id },
+                { $push: { cart: {
+                    id: mongoose.Types.ObjectId(req.query.productId),
+                    quantity: 1,
+                    date: Date.now()
+                }} },
+                { new: true },
+                (err, doc) => {
+                    if(err) {
+                        return res.json({ success: false, err});
+                    }
+                    res.status(200).json(doc.cart);
+                }
+            )
+        }
     });
 });
 
