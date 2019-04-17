@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getProductDetail, clearProductDetail } from '../../redux/actions/product_actions';
+import { addToCart } from '../../redux/actions/user_actions';
 import ProductInfo from "./ProductInfo";
 import ProductImages from './ProductImages';
 import PageTop from '../utils/PageTop';
@@ -22,8 +23,8 @@ class ProductPage extends Component {
         this.props.dispatch(clearProductDetail());
     }
 
-    addToCartHandler = () => {
-
+    addToCartHandler = (id) => {
+        this.props.dispatch(addToCart(id));
     }
 
     render() {
