@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImageLightbox from '../utils/ImageLightbox'
 
 export default class ProductImages extends Component {
 
@@ -30,12 +31,23 @@ export default class ProductImages extends Component {
         }
     }
 
-    handleLightBox = () => {
+    handleLightBox = (position) => {
+        if(this.state.lightboxImages.length > 0) {
+            this.setState({
+                lightbox: true,
+                imagePosition: position
+            });
+        }
+    }
 
+    handleLightBoxClose = () => {
+        this.setState({
+            lightbox: false
+        });
     }
 
     showThumbs = () => (
-        this.state.lightboxImages.map((item, i) =>(
+        this.state.lightboxImages.map((item, i) => (
             i > 0 ?
                 <div
                     key={i}
@@ -63,6 +75,17 @@ export default class ProductImages extends Component {
                     <div className="main_thumbs">
                         { this.showThumbs(detail) }
                     </div>
+                    {
+                        this.state.lightbox ?
+                            <ImageLightbox
+                                id={detail.id}
+                                images={this.state.lightboxImages}
+                                open={this.state.open}
+                                position={this.state.position}
+                                onClose={() => this.handleLightBoxClose()}
+                            />
+                        : null
+                    }
                 </div>
             </div>
         )
